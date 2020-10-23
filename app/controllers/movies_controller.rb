@@ -9,17 +9,43 @@ class MoviesController < ApplicationController
   def index
     @column_selected = ""
     @all_ratings = Movie.all_ratings()
+    #if params[:ratings] or session[:ratings]
+    #  @ratings_to_show = params[:ratings].keys
+    #  session[:ratings] = params[:ratings]
+    #else
+    #  @ratings_to_show = []
+    #end
+    #if params[:order] or session[:order]
+    #  @movies = Movie.with_ratings(@ratings_to_show).sort_by(params[:order])
+    #  session[:order] = params[:order]
+    #else
+    #  @movies = Movie.with_ratings(@ratings_to_show)
+    #end
+    
     if params[:ratings]
       @ratings_to_show = params[:ratings].keys
+      session[:ratings] = params[:ratings]
+    elsif session[:ratings]
+      @ratings_to_show = session[:ratings].keys    
     else
       @ratings_to_show = []
     end
     if params[:order]
-      @movies = Movie.sort_by(params[:order])
-      @column_selected = params[:order]
+      @movies = Movie.with_ratings(@ratings_to_show).sort_by(params[:order])
+      session[:order] = params[:order]
+    elsif session[:order]
+      @movies = Movie.with_ratings(@ratings_to_show).sort_by(session[:order])  
     else
       @movies = Movie.with_ratings(@ratings_to_show)
     end
+    @column_selected = session[:order]
+      
+    #if params[:order]
+    #  @movies = Movie.sort_by(params[:order])
+    #  @column_selected = params[:order]
+    #else
+    #  @movies = Movie.with_ratings(@ratings_to_show)
+    #end
   end
 
   def new
