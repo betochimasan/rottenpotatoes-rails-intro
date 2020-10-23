@@ -7,13 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @column_selected = ""
     @all_ratings = Movie.all_ratings()
     if params[:ratings]
       @ratings_to_show = params[:ratings].keys
     else
       @ratings_to_show = []
     end
-    @movies = Movie.with_ratings(@ratings_to_show)
+    if params[:order]
+      @movies = Movie.sort_by(params[:order])
+      @column_selected = params[:order]
+    else
+      @movies = Movie.with_ratings(@ratings_to_show)
+    end
   end
 
   def new
