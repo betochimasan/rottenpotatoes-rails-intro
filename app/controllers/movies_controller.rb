@@ -39,6 +39,8 @@ class MoviesController < ApplicationController
       @movies = Movie.with_ratings(@ratings_to_show)
     end
     @column_selected = session[:order]
+    
+    
       
     #if params[:order]
     #  @movies = Movie.sort_by(params[:order])
